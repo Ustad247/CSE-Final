@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page || CSE</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url(blur.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 70%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
+        }
+
+        .login-container h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #0056b3;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .login-container label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 6px; /* Reduced padding */
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem; /* Smaller font size */
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .login-container .signup-btn {
+            margin-top: 10px;
+            background-color: #28a745;
+        }
+
+        .login-container .signup-btn:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.8rem;
+            text-align: center;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="login-form" onsubmit="validateLogin(event)">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            
+            <button type="submit">Log In</button>
+            <button type="button" class="signup-btn" onclick="window.location.href='signup.html';">Sign Up</button>
+        </form>
+    </div>
+
+    <footer>© 2025-26 Champions' School For Excellence </footer>
+
+    <script>
+        // Predefined "admin" account
+        let predefinedAdmin = { username: "admin", password: "cse123", role: "admin" };
+    
+        // Initialize users array with the admin account if it doesn't exist
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        if (!users.some(user => user.username === predefinedAdmin.username)) {
+            users.push(predefinedAdmin);
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+    
+        // Signup Function
+        function handleSignup(event) {
+            event.preventDefault();
+    
+            const newUsername = document.getElementById("new-username").value;
+            const newPassword = document.getElementById("new-password").value;
+    
+            // Check if the username already exists
+            const userExists = users.some(user => user.username === newUsername);
+    
+            if (userExists) {
+                alert("This username already exists. Please log in.");
+                window.location.href = "login.html"; // Redirect to login page
+            } else {
+                // Add the new user's credentials to the users array
+                users.push({ username: newUsername, password: newPassword, role: "user" }); // Default role is "user"
+                localStorage.setItem("users", JSON.stringify(users)); // Save users array
+    
+                alert("Signup successful! You can now log in.");
+                window.location.href = "main.html"; // Redirect to login page
+            }
+        }
+    
+        // Login Function
+        function validateLogin(event) {
+            event.preventDefault();
+    
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+    
+            // Check if the entered credentials match a user in the array
+            const matchedUser = users.find(user => user.username === username && user.password === password);
+    
+            if (matchedUser) {
+                if (matchedUser.role === "admin") {
+                    alert("Welcome, Admin!");
+                    // Redirect to a special admin page or enable admin-only features
+                    window.location.href = "main.html";
+                } else {
+                    alert("Login successful!");
+                    window.location.href = "main.html"; // Redirect to the normal user dashboard
+                }
+            } else {
+                alert("Invalid username or password. Please try again.");
+            }
+        }
+    </script>
+    
+</body>
+</html>
